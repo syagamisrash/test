@@ -1,0 +1,203 @@
+<meta http-equiv="content-type" charset="utf-8">
+<!-- http://drive-html-viewer.pansy.at/?state={ids:['1HqfiGLggbDBl47DUaWSi6R-hXlMEhjMO']} -->
+<style>
+{
+
+}
+</style>
+<body></body>
+<script type="text/javascript">
+	var target = document.createElement("div");
+	target.id = "target";
+	document.body.appendChild(target);
+	
+	const notes = ["C","C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"];
+	const notes2 = ["C","C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+	const notes3 = ["C","DB", "D", "EB", "E", "F", "GB", "G", "AB", "A", "BB", "B"];
+	const classes = ["C","C_", "D", "D_", "E", "F", "F_", "G", "G_", "A", "A_", "B"];
+	const flets = ["●●","","","●","","●","","●","","●","",""];
+	const colors = ["#33CCCC","#CCEEFF","#FFDDDD","#CCFFCC","#FF55FF","#EEEE55","#44EEFF"];
+function getName(no) {
+		return notes[no % 12];
+	}
+	function getClassName(no) {
+		return classes[no % 12];
+	}
+	function getFlet(no) {
+		return flets[no % 12];
+	}
+	const t = document.createElement("table");
+	t.border = "1";
+	t.id = "table";
+	for (const gen of [4, 11, 7, 2, 9, 4]) {
+		const tr = document.createElement("tr");
+		t.appendChild(tr);
+		for(let i = 0; i < 24; i++) {
+			const name = getName(i + gen);
+			const td = document.createElement("td");
+			tr.appendChild(td);
+			td.innerText = name;
+			td.style.height = "50px";
+			td.style.width = "50px";
+			td.style.textAlign = "center";
+			td.classList.add(getClassName(i + gen));
+		}
+	}
+	const tr = document.createElement("tr");
+	t.appendChild(tr);
+	
+	for (let i = 0; i < 24; i++) {
+			const td = document.createElement("td");
+			tr.appendChild(td);
+			td.innerHTML = "<b>"+getFlet(i) + "</b>";
+			td.style.width = "50px";
+			td.style.textAlign = "center";
+	}
+	target.appendChild(t);
+	const fletnotr = document.createElement("tr");
+	t.appendChild(fletnotr);
+	
+	for (let i = 0; i < 24; i++) {
+			const td = document.createElement("td");
+			fletnotr.appendChild(td);
+			td.innerHTML = "<b>"+(i) + "</b>";
+			td.style.width = "50px";
+			td.style.textAlign = "center";
+	}
+	target.appendChild(t);
+	
+	const txt = document.createElement("input");
+	txt.id = "txt";
+	txt.style.height = "50px";
+	txt.style.fontSize = "40px";
+	txt.autocomplete = "false";
+	document.body.appendChild(txt);
+	const span = document.createElement("span");
+	span.innerText = "<= chode | scale =>";
+	document.body.appendChild(span);
+	txt.onkeyup =  (e)=>{
+		const deleteCount = document.styleSheets[0].cssRules.length;
+		for (let i = 0; i < deleteCount; i++) {
+			document.styleSheets[0].deleteRule(0);
+		}
+		const val = e.target.value.trim();
+		if (val.length === 0) {
+			return;
+		}
+		const result = val.match("^([ABCDEFGabcdefg][b#]?)(m|-5|6|7|m7|7-5|add9|M7|mM7|m6|m7-5|dim|dim7|aug|aug7|augM7|add2|add4|sus4|7sus4|madd9|add11|madd11|add13|madd13|9|m9|M9|mM9|7-5|M7-5)?$");
+		if (result == null || result.length !== 3) {
+			return;
+		}
+		const noteName = ""+result[1].toUpperCase();
+		const chodeName = ""+result[2];
+		const chodeMap = new Map();
+		chodeMap.set("undefined",[0,4,7]);
+		chodeMap.set("m",		[0,3,7]);
+		chodeMap.set("-5",		[0,4,6]);
+		chodeMap.set("6",		[0,4,7,9]);
+		chodeMap.set("7",		[0,4,7,10]);
+		chodeMap.set("M7",		[0,4,7,11]);
+		chodeMap.set("7-5",		[0,4,6,10]);
+		chodeMap.set("add9",	[0,4,7,2]);
+		chodeMap.set("madd9",	[0,3,7,2]);
+		chodeMap.set("add11",	[0,4,7,5]);
+		chodeMap.set("madd11",	[0,3,7,5]);
+		chodeMap.set("add13",	[0,4,7,9]);
+		chodeMap.set("madd13",	[0,3,7,9]);
+		chodeMap.set("m7",		[0,3,7,10]);
+		chodeMap.set("mM7",		[0,3,7,11]);
+		chodeMap.set("m6",		[0,3,7,9]);
+		chodeMap.set("m7-5",	[0,3,6,10]);
+		chodeMap.set("7-5",		[0,4,6,10]);
+		chodeMap.set("M7-5",	[0,4,6,11]);
+		chodeMap.set("dim",		[0,3,6]);
+		chodeMap.set("dim7",	[0,3,6,9]);
+		chodeMap.set("aug",		[0,4,8]);
+		chodeMap.set("aug7",	[0,4,8,10]);
+		chodeMap.set("augM7",	[0,4,8,11]);
+		chodeMap.set("add2",	[0,2,4,7]);
+		chodeMap.set("add4",	[0,4,5,7]);
+		chodeMap.set("sus4",	[0,5,7]);
+		chodeMap.set("7sus4",	[0,5,7,10]);
+		chodeMap.set("9",		[0,4,7,10,2]);
+		chodeMap.set("m9",		[0,3,7,10,2]);
+		chodeMap.set("M9",		[0,4,7,11,2]);
+		chodeMap.set("mM9",		[0,3,7,11,2]);
+
+		const chodeArray = chodeMap.get(chodeName);
+
+		if (chodeArray == null) {
+			return;
+		}
+		let noteNumber = notes2.indexOf(noteName);
+		if (noteNumber === -1) {
+			noteNumber = notes3.indexOf(noteName);
+		}
+		if (noteNumber === -1) {
+			return;
+		}
+		let i = 0;
+		for (const c of chodeArray) {
+			const styleTarget = (c+noteNumber)%12;
+			document.styleSheets[0].insertRule("."+getClassName(styleTarget) + "{background-color:"+colors[i]+"}");
+			i++;
+		}
+	};
+
+	const scaleTxt = document.createElement("input");
+	scaleTxt.id = "scaleTxt";
+	scaleTxt.style.height = "50px";
+	scaleTxt.style.fontSize = "40px";
+	scaleTxt.autocomplete = "false";
+	document.body.appendChild(scaleTxt);
+	scaleTxt.onkeyup = (e)=>{
+		const deleteCount = document.styleSheets[0].cssRules.length;
+		for (let i = 0; i < deleteCount; i++) {
+			document.styleSheets[0].deleteRule(0);
+		}
+		let val = e.target.value.trim();
+		if (val.length < 2) {
+			return;
+		}
+		const hits = val.match("^([ABCDEFGabcdefg][#bB]?)([mM]|hm|mm|M[pP]|m[pP])$");
+		if (hits == null || hits.length !== 3) {
+			return;
+		}
+		const noteName = hits[1].toUpperCase();
+		let noteNumber = notes2.indexOf(noteName);
+		if (noteNumber === -1) {
+			noteNumber = notes3.indexOf(noteName);
+		}
+		if (noteNumber === -1) {
+			return;
+		}
+		const scaleMap = new Map();
+		scaleMap.set("M", [0, 2, 4, 5, 7, 9, 11]);
+		scaleMap.set("m", [0, 2, 3, 5, 7, 8, 10]);
+		scaleMap.set("hm", [0, 2, 3, 5, 7, 8, 11]);
+		scaleMap.set("mm", [0, 2, 3, 5, 7, 9, 11]);
+		scaleMap.set("MP", [0, 2, 5, 7, 9]);
+		scaleMap.set("mP", [0, 3, 5, 7, 10]);
+		scaleMap.set("Mp", [0, 2, 5, 7, 9]);
+		scaleMap.set("mp", [0, 3, 5, 7, 10]);
+		const scaleArray = scaleMap.get(hits[2]);
+		if (scaleArray == null) {
+			return;
+		}
+		let i = 0;
+		for (const s of scaleArray) {
+			const styleTarget = (s+noteNumber)%12;
+			document.styleSheets[0].insertRule("."+getClassName(styleTarget) + "{background-color:"+colors[i]+"}");
+			i++;
+		}
+	};
+	let i = 0;
+	for(const col of colors) {
+		const d = document.createElement("div");
+		d.innerText = ""+(i+1)+"番"
+		document.body.appendChild(d);
+		d.style.background = col;
+		i++;
+	}
+
+</script>
